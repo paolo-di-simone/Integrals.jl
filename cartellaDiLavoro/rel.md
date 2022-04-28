@@ -4,7 +4,7 @@
 
 Questo modulo implementa un metodo di integrazione finita di polinomi del tipo:
 
-![formula1](./immagini_markdown/formula1.png)
+![formula1](./immagini_markdown/formula1.png :height: 100px :width: 200 px)
 
 Vengono implementate due funzioni *II* e *III* che permettono di fare rispettivamente l'integrale di superficie e di volume di polinomi del tipo specificato.
 

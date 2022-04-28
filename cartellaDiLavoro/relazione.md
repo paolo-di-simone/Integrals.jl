@@ -75,7 +75,7 @@ Permettono di calcolare rispettivamente l'integrale doppio e l'integrale triplo 
 
 Un esempio di calcolo della superficie può essere il seguente:
 
-![quadrato](./immagini_markdown/quadrato.png)
+![quadrato](./immagini_markdown/quadrato.png width="100")
 
 La cui superficie vale: 90.0
 

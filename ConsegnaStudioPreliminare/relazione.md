@@ -25,7 +25,6 @@ Che con $\alpha=0$ e $\beta=0$ si riduce al calcolo dell'area del triangolo con 
 
 La seguente funzione:
 
-`
     function TT(tau::Array{Float64,2}, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)
 	    vo,va,vb = tau[:,1],tau[:,2],tau[:,3]
 	    a = va - vo
@@ -57,7 +56,6 @@ La seguente funzione:
 	        return s1 * norm(c)
 	    end
     end
-`
 
 Permette di calcolare l'integrale di un triangolo implementando la seguente formula:
 
@@ -78,8 +76,7 @@ Permettono di calcolare rispettivamente l'integrale doppio e l'integrale triplo 
 
 Un esempio di calcolo della superficie può essere il seguente (da cui sono stati omessi gli output):
 
-`
-julia> function makeSurface(s)
+    julia> function makeSurface(s)
            W,(WW,EW,FW) = Lar.cuboid([s,s], true)
            main_square = (W,EW)
            Q,(QQ,EQ,FQ) = Lar.cuboid([1,1], true)
@@ -99,41 +96,39 @@ julia> function makeSurface(s)
            V = vcat(V, a)
            return V, VV, EV, FV
        end
-
-julia> V, VV, EV, FV = makeSurface(10)
-
-julia> model = (V, (VV, EV, FV))
-
-julia> P = V, FV
-
-julia> Plasm.view(Plasm.hpc_exploded(model)(1.1,1.1,1.1))
-
-julia> surface(P)
-90.0
-`
+       
+       julia> V, VV, EV, FV = makeSurface(10)
+       
+       julia> model = (V, (VV, EV, FV))
+       
+       julia> P = V, FV
+       
+       julia> Plasm.view(Plasm.hpc_exploded(model)(1.1,1.1,1.1))
+       
+       julia> surface(P)
+       
+       90.0
 
 <div align="center"><img src="./immagini_markdown/quadrato.png" width="700"></div>
 
 Come riferimento per il calcolo del volume si è preso il modello 3D *Stanford bunny*:
 
-`
-julia> V, EV, FV = obj2lar("bunny.obj")
-
-julia> EV = EV[1]
-
-julia> FV = FV[1]
-
-julia> VV = [[k] for k=1:size(V,2)]
-
-julia> model = (V, (VV, EV, FV))
-
-julia> P = V, FV
-
-julia> Plasm.view(V, FV)
-
-julia> volume(P)
--1.8818908358435506e-5
-`
+    julia> V, EV, FV = obj2lar("bunny.obj")
+    
+    julia> EV = EV[1]
+    
+    julia> FV = FV[1]
+    
+    julia> VV = [[k] for k=1:size(V,2)]
+    
+    julia> model = (V, (VV, EV, FV))
+    
+    julia> P = V, FV
+    
+    julia> Plasm.view(V, FV)
+    
+    julia> volume(P)
+    -1.8818908358435506e-5
 
 <div align="center"><img src="./immagini_markdown/bunny.png" width="700"></div>
 
@@ -141,16 +136,15 @@ julia> volume(P)
 
 Le interfacce principali del modulo sono:
 
-`Lar.surface`
+* #### `Lar.surface`
 
-`Lar.volume`
+* #### `Lar.volume`
 
-`Lar.centroid`
+* #### `Lar.centroid`
 
-`Lar.inertiaProduct`
+* #### `Lar.inertiaProduct`
 
-`Lar.inertiaMoment`
-
+* #### `Lar.inertiaMoment`
 
 
 

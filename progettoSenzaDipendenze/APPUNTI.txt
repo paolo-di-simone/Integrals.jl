@@ -1,6 +1,0 @@
-
-Per usare il modulo, da interprete Julia includere il file integr.jl:
-
-	julia> using("integr.jl")
-	
-Ho provato gli esempi su https://github.com/cvdlab/LinearAlgebraicRepresentation.jl/blob/master/docs/src/integr.md e funzionano tutti.

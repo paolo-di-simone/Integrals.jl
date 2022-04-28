@@ -75,13 +75,13 @@ Permettono di calcolare rispettivamente l'integrale doppio e l'integrale triplo 
 
 Un esempio di calcolo della superficie può essere il seguente:
 
-<img src="./immagini_markdown/quadrato.png" width="200">
+<center><img src="./immagini_markdown/quadrato.png" width="1000"></center>
 
 La cui superficie vale: 90.0
 
 Come riferimento per il calcolo del volume si è preso il modello 3D *Stanford bunny*:
 
-![bunny](./immagini_markdown/bunny.png)
+<center><img src="./immagini_markdown/bunny.png" width="1000"></center>
 
 Il cui volume vale: -1.8818908358435506e-5
 

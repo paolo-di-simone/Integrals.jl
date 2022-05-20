@@ -2,11 +2,9 @@ module Integrals
 
 using LinearAlgebraicRepresentation
 
-#=
 const Points = Matrix
 const Cells = Array{Array{Int,1},1}
 const LAR = Union{ Tuple{Points, Cells},Tuple{Points, Cells, Cells} }
-=#
 
 function M(alpha::Int, beta::Int)::Float64
     a = 0

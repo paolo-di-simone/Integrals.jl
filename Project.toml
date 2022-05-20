@@ -1,0 +1,7 @@
+name = "Integrals"
+uuid = "dbdf9ee0-7e86-4d79-a131-ad1b41ae593a"
+authors = ["paolo-di-simone <72343829+paolo-di-simone@users.noreply.github.com>"]
+version = "0.1.0"
+
+[deps]
+LinearAlgebraicRepresentation = "95167b0c-186a-594b-a231-52369c6de044"

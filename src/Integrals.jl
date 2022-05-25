@@ -14,35 +14,51 @@ function M(alpha::Int, beta::Int)::Float64
     return a/(alpha + 1)
 end
 
+function s4(a, b, h, k, m, i, j)
+	ss4 = 0.0
+	for l=0:m
+		ss4 += binomial(m,l) * a[3]^(m-l) * b[3]^l * M(h+k+m-i-j-l, i+j+l)
+	end
+	return ss4
+end
+
+function s3(a, b, h, k, m, i)
+	ss3 = 0.0
+	for j=0:k
+		ss3 += binomial(k,j) * a[2]^(k-j) * b[2]^j * s4(a, b, h, k, m, i, j)
+	end
+	return ss3
+end
+
+function s2(a, b, h, k, m)
+	ss2 = 0.0
+	for i=0:h 
+		ss2 += binomial(h,i) * a[1]^(h-i) * b[1]^i * s3(a, b, h, k, m, i);
+	end
+	return ss2
+end
+
+function s1(a, b, alpha, beta, gamma, vo)
+	ss1 = 0.0
+	for h=0:alpha
+		for k=0:beta
+			for m=0:gamma
+				ss1 += binomial(alpha,h) * binomial(beta,k) * binomial(gamma,m) * vo[1]^(alpha-h) * vo[2]^(beta-k) * vo[3]^(gamma-m) * s2(a, b, h, k, m)
+			end
+		end
+	end
+	return ss1
+end
+
 function TT(tau::Array{Float64,2}, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)
 	vo,va,vb = tau[:,1],tau[:,2],tau[:,3]
 	a = va - vo
 	b = vb - vo
-	s1 = 0.0
-	for h=0:alpha
-		for k=0:beta
-			for m=0:gamma
-				s2 = 0.0
-				for i=0:h 
-					s3 = 0.0
-					for j=0:k
-						s4 = 0.0
-						for l=0:m
-							s4 += binomial(m,l) * a[3]^(m-l) * b[3]^l * M(h+k+m-i-j-l, i+j+l)
-						end
-						s3 += binomial(k,j) * a[2]^(k-j) * b[2]^j * s4
-					end
-					s2 += binomial(h,i) * a[1]^(h-i) * b[1]^i * s3;
-				end
-				s1 += binomial(alpha,h) * binomial(beta,k) * binomial(gamma,m) * vo[1]^(alpha-h) * vo[2]^(beta-k) * vo[3]^(gamma-m) * s2
-			end
-		end
-	end
 	c = cross(a,b)
 	if signedInt == true
-		return s1 * norm(c) * sign(c[3])
+		return s1(a, b, alpha, beta, gamma, vo) * norm(c) * sign(c[3])
 	else
-		return s1 * norm(c)
+		return s1(a, b, alpha, beta, gamma, vo) * norm(c)
 	end	
 end
 

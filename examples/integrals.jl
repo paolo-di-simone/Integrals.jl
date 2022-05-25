@@ -1,8 +1,6 @@
 using LinearAlgebraicRepresentation
 using Plasm
 Lar = LinearAlgebraicRepresentation
-include("obj2lar.jl")
-include("integrals.jl")
 
 function obj2lar(path)
     vs = Array{Float64, 2}(undef, 0, 3)

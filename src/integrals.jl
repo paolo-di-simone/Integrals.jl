@@ -43,15 +43,22 @@ function s1(a, b, alpha, beta, gamma, vo)
 end
 
 function TT(tau::Array{Float64,2}, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)
-	vo,va,vb = tau[:,1],tau[:,2],tau[:,3]
-	a = va - vo
-	b = vb - vo
-	c = cross(a,b)
-	if signedInt == true
-		return s1(a, b, alpha, beta, gamma, vo) * norm(c) * sign(c[3])
-	else
-		return s1(a, b, alpha, beta, gamma, vo) * norm(c)
-	end	
+    vo,va,vb = tau[:,1],tau[:,2],tau[:,3]
+    a = va - vo
+    b = vb - vo
+    c = cross(a,b)
+    if alpha == 0 && beta == 0 && gamma == 0
+        area_tt = 0.5
+    elseif alpha == 1 && beta == 0 && gamma == 0
+        area_tt = vo[1] * 0.5 + a[1] / 6 + b[1] / 6
+    else
+        area_tt = s1(a, b, alpha, beta, gamma, vo)
+    end
+    if signedInt == true
+        return area_tt * norm(c) * sign(c[3])
+    else
+        return area_tt * norm(c)
+    end
 end
 
 function II(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt=false)::Float64
@@ -78,7 +85,7 @@ function II(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt=false)::Float64
     return w
 end
 
-function III(P::LAR, alpha::Int, beta::Int, gamma::Int)::Float64
+function III(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)::Float64
     w = 0
     V, FV = P
     for i=1:length(FV)
@@ -87,7 +94,12 @@ function III(P::LAR, alpha::Int, beta::Int, gamma::Int)::Float64
         a = va - vo
         b = vb - vo
         c = cross(a,b)
-        w += c[1]/norm(c) * TT(tau, alpha+1, beta, gamma)
+        term = c[1]/norm(c) * TT(tau, alpha+1, beta, gamma, signedInt)
+        if signedInt
+            w += term
+        else
+            w += abs(term)
+        end
     end
     return w/(alpha + 1)
 end

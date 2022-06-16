@@ -1,4 +1,9 @@
+export M
+"""
+    M(alpha::Int, beta::Int)::Float64
 
+Module for integration of polynomials over 3D volumes and surfaces
+"""
 function M(alpha::Int, beta::Int)::Float64
     a = 0
     for l=0:(alpha + 1)
@@ -43,6 +48,12 @@ function s1(a, b, alpha, beta, gamma, vo)
     return ss1
 end
 
+export TT
+""" 
+	TT(tau::Array{Float64,2}, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)
+
+The main integration routine 
+"""
 function TT(tau::Array{Float64,2}, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)
     vo,va,vb = tau[:,1],tau[:,2],tau[:,3]
     a = va - vo
@@ -125,6 +136,28 @@ function TT(tau::Array{Float64,2}, alpha::Int, beta::Int, gamma::Int, signedInt:
     end
 end
 
+export II
+""" 
+	II(P::Lar.LAR, alpha::Int, beta::Int, gamma::Int, signedInt=false)
+	
+Basic integration function on 2D plane.
+
+# Example  unit 3D triangle
+```julia
+julia> V = [0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0]
+3×3 Array{Float64,2}:
+ 0.0  1.0  0.0
+ 0.0  0.0  1.0
+ 0.0  0.0  0.0
+julia> FV = [[1,2,3]]
+1-element Array{Array{Int64,1},1}:
+ [1, 2, 3]
+julia> P = V,FV
+([0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0], Array{Int64,1}[[1, 2, 3]])
+julia> Lar.II(P, 0,0,0)
+0.5
+```
+"""
 function II(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt=false)::Float64
     V, FV = P
     partialSum = zeros(length(FV))

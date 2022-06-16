@@ -128,31 +128,30 @@ end
 function II(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt=false)::Float64
     w = 0
     V, FV = P
-    if typeof(FV) == Array{Int64,2}
-    	FV = [FV[:,k] for k=1:size(FV,2)]
-    end
-    for i=1:length(FV)
+    partialSum = zeros(length(FV))
+    @threads for i=1:length(FV)
         tau = hcat([V[:,v] for v in FV[i]]...)
         if size(tau,2) == 3
-        	term = TT(tau, alpha, beta, gamma, signedInt)
-        	if signedInt
-        		w += term
-        	else
-        		w += abs(term)
-        	end
+            term = TT(tau, alpha, beta, gamma, signedInt)
+            if signedInt
+                @inbounds partialSum[i] = term
+            else
+                @inbounds partialSum[i] = abs(term)
+            end
         elseif size(tau,2) > 3
-        	println("ERROR: FV[$(i)] is not a triangle")
+            println("ERROR: FV[$(i)] is not a triangle")
         else
-        	println("ERROR: FV[$(i)] is degenerate")
+            println("ERROR: FV[$(i)] is degenerate")
         end
     end    
-    return w
+    return sum(partialSum)
 end
 
 function III(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)::Float64
     w = 0
     V, FV = P
-    for i=1:length(FV)
+    partialSum = zeros(length(FV))
+    @threads for i=1:length(FV)
         tau = hcat([V[:,v] for v in FV[i]]...)
         vo,va,vb = tau[:,1],tau[:,2],tau[:,3]
         a = va - vo
@@ -160,14 +159,13 @@ function III(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)::
         c = cross(a,b)
         term = c[1]/norm(c) * TT(tau, alpha+1, beta, gamma, signedInt)
         if signedInt
-            w += term
+            @inbounds partialSum[i] = term
         else
-            w += abs(term)
+            @inbounds partialSum[i] = abs(term)
         end
     end
-    return w/(alpha + 1)
+    return sum(partialSum)/(alpha + 1)
 end
-
 function surface(P::LAR, signedInt::Bool=false)::Float64
     return II(P, 0, 0, 0, signedInt)
 end
@@ -178,26 +176,32 @@ end
 
 function firstMoment(P::LAR)::Array{Float64,1}
     out = zeros(3)
-    out[1] = III(P, 1, 0, 0)
-    out[2] = III(P, 0, 1, 0)
-    out[3] = III(P, 0, 0, 1)
-    return out
+    @async begin
+		out[1] = III(P, 1, 0, 0)
+		out[2] = III(P, 0, 1, 0)
+		out[3] = III(P, 0, 0, 1)
+	end
+    return fetch(out)
 end
 
 function secondMoment(P::LAR)::Array{Float64,1}
     out = zeros(3)
-    out[1] = III(P, 2, 0, 0)
-    out[2] = III(P, 0, 2, 0)
-    out[3] = III(P, 0, 0, 2)
-    return out
+    @async begin
+		out[1] = III(P, 2, 0, 0)
+		out[2] = III(P, 0, 2, 0)
+		out[3] = III(P, 0, 0, 2)
+	end
+    return fetch(out)
 end
 
 function inertiaProduct(P::LAR)::Array{Float64,1}
     out = zeros(3)
-    out[1] = III(P, 0, 1, 1)
-    out[2] = III(P, 1, 0, 1)
-    out[3] = III(P, 1, 1, 0)
-    return out
+    @async begin
+		out[1] = III(P, 0, 1, 1)
+		out[2] = III(P, 1, 0, 1)
+		out[3] = III(P, 1, 1, 0)
+	end
+    return fetch(out)
 end
 
 function centroid(P::LAR)::Array{Float64,1}

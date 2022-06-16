@@ -181,7 +181,7 @@ function II(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt=false)::Float64
 end
 
 """ 
-	function III(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)::Float64
+	III(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)::Float64
 
 Basic integration function on 3D space.
 

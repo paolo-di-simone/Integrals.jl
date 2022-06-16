@@ -2,6 +2,7 @@ module Integrals
 
 	using LinearAlgebraicRepresentation
 	using LinearAlgebra
+	using Base.Threads
 
 	const Points = Matrix
 	const Cells = Array{Array{Int,1},1}

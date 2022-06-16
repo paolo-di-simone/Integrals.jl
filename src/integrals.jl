@@ -1,13 +1,4 @@
-"""
-    M(alpha::Int, beta::Int)::Float64
-    
-This is an example of Docstring. This function receives two 
-numbers x and y and returns the sum of the squares.
 
-```math
-x^2 + y^2 
-```
-"""
 function M(alpha::Int, beta::Int)::Float64
     a = 0
     for l=0:(alpha + 1)

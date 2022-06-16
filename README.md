@@ -13,4 +13,4 @@ Pkg.add(url="https://github.com/paolo-di-simone/Integrals.jl")
 |:---|:---|:---|:---|
 |Paolo Di Simone|584638|pao.disimone@stud.uniroma3.it| [https://github.com/paolo-di-simone](https://github.com/paolo-di-simone) |
 |Filippo Galioti|527289|mat.colonnello@stud.uniroma3.it|[https://github.com/MatteoColonnello](https://github.com/MatteoColonnello)|
-|Federico Pasqui|522705|mar.falanga@stud.uniroma3.it|[https://github.com/MartinaFalanga](https://github.com/MartinaFalanga) |
+|Federico Pasqui|501749|fed.pasqui@stud.uniroma3.it|[https://github.com/MartinaFalanga](https://github.com/MartinaFalanga) |

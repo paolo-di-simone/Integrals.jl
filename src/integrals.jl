@@ -1,4 +1,4 @@
-export M
+
 """
     M(alpha::Int, beta::Int)::Float64
 
@@ -48,7 +48,6 @@ function s1(a, b, alpha, beta, gamma, vo)
     return ss1
 end
 
-export TT
 """ 
 	TT(tau::Array{Float64,2}, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)
 
@@ -136,7 +135,6 @@ function TT(tau::Array{Float64,2}, alpha::Int, beta::Int, gamma::Int, signedInt:
     end
 end
 
-export II
 """ 
 	II(P::Lar.LAR, alpha::Int, beta::Int, gamma::Int, signedInt=false)
 	
@@ -149,12 +147,15 @@ julia> V = [0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0]
  0.0  1.0  0.0
  0.0  0.0  1.0
  0.0  0.0  0.0
+ 
 julia> FV = [[1,2,3]]
 1-element Array{Array{Int64,1},1}:
  [1, 2, 3]
+ 
 julia> P = V,FV
 ([0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0], Array{Int64,1}[[1, 2, 3]])
-julia> Lar.II(P, 0,0,0)
+
+julia> Integrals.II(P, 0,0,0)
 0.5
 ```
 """
@@ -179,6 +180,34 @@ function II(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt=false)::Float64
     return sum(partialSum)
 end
 
+""" 
+	function III(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)::Float64
+
+Basic integration function on 3D space.
+
+# Example # unit 3D tetrahedron
+```julia
+julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0]
+3×4 Array{Float64,2}:
+ 0.0  1.0  0.0  0.0
+ 0.0  0.0  1.0  0.0
+ 0.0  0.0  0.0  1.0
+
+julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]]
+4-element Array{Array{Int64,1},1}:
+ [1, 2, 4]
+ [1, 3, 2]
+ [4, 3, 1]
+ [2, 3, 4]
+
+julia> P = V,FV
+([0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0], 
+Array{Int64,1}[[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]])
+
+julia> Integrals.III(P, 0,0,0)
+0.16666666666666674
+```
+"""
 function III(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)::Float64
     V, FV = P
     partialSum = zeros(length(FV))
@@ -197,48 +226,201 @@ function III(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)::
     end
     return sum(partialSum)/(alpha + 1)
 end
+
+"""
+	surface(P::Lar.LAR, signedInt::Bool=false)::Float64
+
+`surface` integral on polyhedron `P`.
+
+# Example unit 3D triangle
+```julia
+julia> V = [0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0]
+3×3 Array{Float64,2}:
+ 0.0  1.0  0.0
+ 0.0  0.0  1.0
+ 0.0  0.0  0.0
+ 
+julia> FV = [[1,2,3]]
+1-element Array{Array{Int64,1},1}:
+ [1, 2, 3]
+ 
+julia> P = V,FV
+([0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0], Array{Int64,1}[[1, 2, 3]])
+
+julia> Integrals.surface(P)
+0.5
+```
+"""
 function surface(P::LAR, signedInt::Bool=false)::Float64
     return II(P, 0, 0, 0, signedInt)
 end
 
-function volume(P::LAR)::Float64
-    return III(P, 0, 0, 0)
+"""
+	volume(P::LAR, signedInt::Bool=false)::Float64
+
+`volume` integral on polyhedron `P`.
+
+# Example # unit 3D tetrahedron
+```julia
+julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0]
+3×4 Array{Float64,2}:
+ 0.0  1.0  0.0  0.0
+ 0.0  0.0  1.0  0.0
+ 0.0  0.0  0.0  1.0
+
+julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]]
+4-element Array{Array{Int64,1},1}:
+ [1, 2, 4]
+ [1, 3, 2]
+ [4, 3, 1]
+ [2, 3, 4]
+
+julia> P = V,FV
+([0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0], 
+Array{Int64,1}[[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]])
+
+julia> Integrals.volume(P)
+0.16666666666666674
+```
+"""
+function volume(P::LAR, signedInt::Bool=false)::Float64
+    return III(P, 0, 0, 0, signedInt)
 end
 
+""" 
+	firstMoment(P::Lar.LAR)::Array{Float64,1}
+
+First moments as terms of the Euler tensor. Remember that the integration algorithm is a boundary integration. Hence the model must be a boundary model. In this case, a 2-complex of triangles. 
+
+# Example # unit 3D tetrahedron
+```julia
+julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
+
+julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
+
+julia> P = V,FV;
+
+julia> Integrals.firstMoment(P)
+3-element Array{Float64,1}:
+ 0.0416667
+ 0.0416667
+ 0.0416667
+```
+"""
 function firstMoment(P::LAR)::Array{Float64,1}
     out = zeros(3)
     @async begin
-	out[1] = III(P, 1, 0, 0)
-	out[2] = III(P, 0, 1, 0)
-	out[3] = III(P, 0, 0, 1)
+		out[1] = III(P, 1, 0, 0)
+		out[2] = III(P, 0, 1, 0)
+		out[3] = III(P, 0, 0, 1)
     end
     return fetch(out)
 end
 
+""" 
+	secondMoment(P::Lar.LAR)::Array{Float64,1}
+
+Second moments as terms of the Euler tensor.
+
+# Example # unit 3D tetrahedron
+```julia
+julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
+
+julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
+
+julia> P = V,FV;
+
+julia> Integrals.secondMoment(P)
+3-element Array{Float64,1}:
+ 0.0166667
+ 0.0166667
+ 0.0166667
+```
+"""
 function secondMoment(P::LAR)::Array{Float64,1}
     out = zeros(3)
     @async begin
-	out[1] = III(P, 2, 0, 0)
-	out[2] = III(P, 0, 2, 0)
-	out[3] = III(P, 0, 0, 2)
+		out[1] = III(P, 2, 0, 0)
+		out[2] = III(P, 0, 2, 0)
+		out[3] = III(P, 0, 0, 2)
     end
     return fetch(out)
 end
 
+""" 
+	inertiaProduct(P::Lar.LAR)::Array{Float64,1}
+
+Inertia products as terms of the Euler tensor.
+
+# Example # unit 3D tetrahedron
+```julia
+julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
+
+julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
+
+julia> P = V,FV;
+
+julia> Integrals.inertiaProduct(P)
+3-element Array{Float64,1}:
+ 0.00833333
+ 0.00833333
+ 0.00833333
+```
+"""
 function inertiaProduct(P::LAR)::Array{Float64,1}
     out = zeros(3)
     @async begin
-	out[1] = III(P, 0, 1, 1)
-	out[2] = III(P, 1, 0, 1)
-	out[3] = III(P, 1, 1, 0)
+		out[1] = III(P, 0, 1, 1)
+		out[2] = III(P, 1, 0, 1)
+		out[3] = III(P, 1, 1, 0)
     end
     return fetch(out)
 end
 
+""" 
+	centroid(P::Lar.LAR)::Array{Float64,1}
+
+Barycenter or `centroid` of polyhedron `P`.
+
+# Example # unit 3D tetrahedron
+```julia
+julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
+
+julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
+
+julia> P = V,FV;
+
+julia> Integrals.centroid(P)
+3-element Array{Float64,1}:
+ 0.25
+ 0.25
+ 0.25
+```
+"""
 function centroid(P::LAR)::Array{Float64,1}
     return firstMoment(P)./volume(P)
 end
 
+""" 
+	inertiaMoment(P::Lar.LAR)::Array{Float64,1}
+
+Inertia moments  of polyhedron `P`.
+
+# Example # unit 3D tetrahedron
+```julia
+julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
+
+julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
+
+julia> P = V,FV;
+
+julia> Integrals.inertiaMoment(P)
+3-element Array{Float64,1}:
+ 0.0333333
+ 0.0333333
+ 0.0333333
+```
+"""
 function inertiaMoment(P::LAR)::Array{Float64,1}
     out = zeros(3)
     result = secondMoment(P)

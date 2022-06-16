@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Home · Integrals.jl</title><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.044/juliamono.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="index.html">Integrals.jl</a></span></div><form class="docs-search" action="search.html"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li class="is-active"><a class="tocitem" href="index.html">Home</a><ul class="internal"><li><a class="tocitem" href="#Interfacce-principali"><span>Interfacce principali</span></a></li><li><a class="tocitem" href="#Documentazione-funzioni"><span>Documentazione funzioni</span></a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="index.html">Home</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="index.html">Home</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/paolo-di-simone/Integrals.jl/blob/master/docs/src/index.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Integrals.jl"><a class="docs-heading-anchor" href="#Integrals.jl">Integrals.jl</a><a id="Integrals.jl-1"></a><a class="docs-heading-anchor-permalink" href="#Integrals.jl" title="Permalink"></a></h1><p>Questo modulo implementa un metodo di integrazione finita di polinomi. </p><h2 id="Interfacce-principali"><a class="docs-heading-anchor" href="#Interfacce-principali">Interfacce principali</a><a id="Interfacce-principali-1"></a><a class="docs-heading-anchor-permalink" href="#Interfacce-principali" title="Permalink"></a></h2><ul><li>II(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt=false)::Float64</li><li>III(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)::Float64</li><li>surface(P::LAR, signedInt::Bool=false)::Float64</li><li>volume(P::LAR, signedInt::Bool=false)::Float64</li><li>firstMoment(P::LAR)::Array{Float64,1}</li><li>secondMoment(P::Lar.LAR)::Array{Float64,1}</li><li>inertiaProduct(P::LAR)::Array{Float64,1}</li><li>centroid(P::LAR)::Array{Float64,1}</li><li>inertiaMoment(P::LAR)::Array{Float64,1}</li></ul><h2 id="Documentazione-funzioni"><a class="docs-heading-anchor" href="#Documentazione-funzioni">Documentazione funzioni</a><a id="Documentazione-funzioni-1"></a><a class="docs-heading-anchor-permalink" href="#Documentazione-funzioni" title="Permalink"></a></h2><article class="docstring"><header><a class="docstring-binding" id="Integrals.M" href="#Integrals.M"><code>Integrals.M</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">M(alpha::Int, beta::Int)::Float64</code></pre><p>Module for integration of polynomials over 3D volumes and surfaces</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Integrals.TT" href="#Integrals.TT"><code>Integrals.TT</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">TT(tau::Array{Float64,2}, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)</code></pre><p>The main integration routine </p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Integrals.II" href="#Integrals.II"><code>Integrals.II</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">II(P::Lar.LAR, alpha::Int, beta::Int, gamma::Int, signedInt=false)</code></pre><p>Basic integration function on 2D plane.</p><p><strong>Example  unit 3D triangle</strong></p><pre><code class="language-julia hljs">julia&gt; V = [0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0]
+3×3 Array{Float64,2}:
+ 0.0  1.0  0.0
+ 0.0  0.0  1.0
+ 0.0  0.0  0.0
+ 
+julia&gt; FV = [[1,2,3]]
+1-element Array{Array{Int64,1},1}:
+ [1, 2, 3]
+ 
+julia&gt; P = V,FV
+([0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0], Array{Int64,1}[[1, 2, 3]])
+
+julia&gt; Integrals.II(P, 0,0,0)
+0.5</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Integrals.III" href="#Integrals.III"><code>Integrals.III</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">III(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)::Float64</code></pre><p>Basic integration function on 3D space.</p><p><strong>Example # unit 3D tetrahedron</strong></p><pre><code class="language-julia hljs">julia&gt; V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0]
+3×4 Array{Float64,2}:
+ 0.0  1.0  0.0  0.0
+ 0.0  0.0  1.0  0.0
+ 0.0  0.0  0.0  1.0
+
+julia&gt; FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]]
+4-element Array{Array{Int64,1},1}:
+ [1, 2, 4]
+ [1, 3, 2]
+ [4, 3, 1]
+ [2, 3, 4]
+
+julia&gt; P = V,FV
+([0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0], 
+Array{Int64,1}[[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]])
+
+julia&gt; Integrals.III(P, 0,0,0)
+0.16666666666666674</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Integrals.surface" href="#Integrals.surface"><code>Integrals.surface</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">surface(P::Lar.LAR, signedInt::Bool=false)::Float64</code></pre><p><code>surface</code> integral on polyhedron <code>P</code>.</p><p><strong>Example unit 3D triangle</strong></p><pre><code class="language-julia hljs">julia&gt; V = [0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0]
+3×3 Array{Float64,2}:
+ 0.0  1.0  0.0
+ 0.0  0.0  1.0
+ 0.0  0.0  0.0
+ 
+julia&gt; FV = [[1,2,3]]
+1-element Array{Array{Int64,1},1}:
+ [1, 2, 3]
+ 
+julia&gt; P = V,FV
+([0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0], Array{Int64,1}[[1, 2, 3]])
+
+julia&gt; Integrals.surface(P)
+0.5</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Integrals.volume" href="#Integrals.volume"><code>Integrals.volume</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">volume(P::LAR, signedInt::Bool=false)::Float64</code></pre><p><code>volume</code> integral on polyhedron <code>P</code>.</p><p><strong>Example # unit 3D tetrahedron</strong></p><pre><code class="language-julia hljs">julia&gt; V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0]
+3×4 Array{Float64,2}:
+ 0.0  1.0  0.0  0.0
+ 0.0  0.0  1.0  0.0
+ 0.0  0.0  0.0  1.0
+
+julia&gt; FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]]
+4-element Array{Array{Int64,1},1}:
+ [1, 2, 4]
+ [1, 3, 2]
+ [4, 3, 1]
+ [2, 3, 4]
+
+julia&gt; P = V,FV
+([0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0], 
+Array{Int64,1}[[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]])
+
+julia&gt; Integrals.volume(P)
+0.16666666666666674</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Integrals.firstMoment" href="#Integrals.firstMoment"><code>Integrals.firstMoment</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">firstMoment(P::Lar.LAR)::Array{Float64,1}</code></pre><p>First moments as terms of the Euler tensor. Remember that the integration algorithm is a boundary integration. Hence the model must be a boundary model. In this case, a 2-complex of triangles. </p><p><strong>Example # unit 3D tetrahedron</strong></p><pre><code class="language-julia hljs">julia&gt; V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
+
+julia&gt; FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
+
+julia&gt; P = V,FV;
+
+julia&gt; Integrals.firstMoment(P)
+3-element Array{Float64,1}:
+ 0.0416667
+ 0.0416667
+ 0.0416667</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Integrals.secondMoment" href="#Integrals.secondMoment"><code>Integrals.secondMoment</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">secondMoment(P::Lar.LAR)::Array{Float64,1}</code></pre><p>Second moments as terms of the Euler tensor.</p><p><strong>Example # unit 3D tetrahedron</strong></p><pre><code class="language-julia hljs">julia&gt; V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
+
+julia&gt; FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
+
+julia&gt; P = V,FV;
+
+julia&gt; Integrals.secondMoment(P)
+3-element Array{Float64,1}:
+ 0.0166667
+ 0.0166667
+ 0.0166667</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Integrals.inertiaProduct" href="#Integrals.inertiaProduct"><code>Integrals.inertiaProduct</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">inertiaProduct(P::Lar.LAR)::Array{Float64,1}</code></pre><p>Inertia products as terms of the Euler tensor.</p><p><strong>Example # unit 3D tetrahedron</strong></p><pre><code class="language-julia hljs">julia&gt; V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
+
+julia&gt; FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
+
+julia&gt; P = V,FV;
+
+julia&gt; Integrals.inertiaProduct(P)
+3-element Array{Float64,1}:
+ 0.00833333
+ 0.00833333
+ 0.00833333</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Integrals.centroid" href="#Integrals.centroid"><code>Integrals.centroid</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">centroid(P::Lar.LAR)::Array{Float64,1}</code></pre><p>Barycenter or <code>centroid</code> of polyhedron <code>P</code>.</p><p><strong>Example # unit 3D tetrahedron</strong></p><pre><code class="language-julia hljs">julia&gt; V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
+
+julia&gt; FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
+
+julia&gt; P = V,FV;
+
+julia&gt; Integrals.centroid(P)
+3-element Array{Float64,1}:
+ 0.25
+ 0.25
+ 0.25</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Integrals.inertiaMoment" href="#Integrals.inertiaMoment"><code>Integrals.inertiaMoment</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">inertiaMoment(P::Lar.LAR)::Array{Float64,1}</code></pre><p>Inertia moments  of polyhedron <code>P</code>.</p><p><strong>Example # unit 3D tetrahedron</strong></p><pre><code class="language-julia hljs">julia&gt; V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
+
+julia&gt; FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
+
+julia&gt; P = V,FV;
+
+julia&gt; Integrals.inertiaMoment(P)
+3-element Array{Float64,1}:
+ 0.0333333
+ 0.0333333
+ 0.0333333</code></pre></div></section></article></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.18 on <span class="colophon-date" title="Thursday 16 June 2022 21:23">Thursday 16 June 2022</span>. Using Julia version 1.6.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

@@ -1,7 +1,5 @@
-
 """
     M(alpha::Int, beta::Int)::Float64
-
 Module for integration of polynomials over 3D volumes and surfaces
 """
 function M(alpha::Int, beta::Int)::Float64
@@ -15,7 +13,7 @@ end
 function s4(a, b, h, k, m, i, j)
     ss4 = 0.0
     for l=0:m
-	ss4 += binomial(m,l) * a[3]^(m-l) * b[3]^l * M(h+k+m-i-j-l, i+j+l)
+		ss4 += binomial(m,l) * a[3]^(m-l) * b[3]^l * M(h+k+m-i-j-l, i+j+l)
     end
     return ss4
 end
@@ -23,7 +21,7 @@ end
 function s3(a, b, h, k, m, i)
     ss3 = 0.0
     for j=0:k
-	ss3 += binomial(k,j) * a[2]^(k-j) * b[2]^j * s4(a, b, h, k, m, i, j)
+		ss3 += binomial(k,j) * a[2]^(k-j) * b[2]^j * s4(a, b, h, k, m, i, j)
     end
     return ss3
 end
@@ -31,26 +29,24 @@ end
 function s2(a, b, h, k, m)
     ss2 = 0.0
     for i=0:h 
-	ss2 += binomial(h,i) * a[1]^(h-i) * b[1]^i * s3(a, b, h, k, m, i);
+		ss2 += binomial(h,i) * a[1]^(h-i) * b[1]^i * s3(a, b, h, k, m, i);
     end
     return ss2
 end
 
 function s1(a, b, alpha, beta, gamma, vo)
-    ss1 = 0.0
-    for h=0:alpha
-	for k=0:beta
-	    for m=0:gamma
+	ss1 = 0.0
+	for x=0:((alpha+1) * (beta+1) * (gamma+1))
+		h = x ÷ ((beta+1) * (gamma+1))
+		k = (x - h * (beta+1) * (gamma+1)) ÷ (gamma + 1) 
+		m = (x - h * (beta+1) * (gamma+1)) % (gamma + 1) 
 		ss1 += binomial(alpha,h) * binomial(beta,k) * binomial(gamma,m) * vo[1]^(alpha-h) * vo[2]^(beta-k) * vo[3]^(gamma-m) * s2(a, b, h, k, m)
-	    end
 	end
-    end
-    return ss1
+	return ss1
 end
 
 """ 
 	TT(tau::Array{Float64,2}, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)
-
 The main integration routine 
 """
 function TT(tau::Array{Float64,2}, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)
@@ -139,7 +135,6 @@ end
 	II(P::Lar.LAR, alpha::Int, beta::Int, gamma::Int, signedInt=false)
 	
 Basic integration function on 2D plane.
-
 # Example  unit 3D triangle
 ```julia
 julia> V = [0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0]
@@ -154,23 +149,22 @@ julia> FV = [[1,2,3]]
  
 julia> P = V,FV
 ([0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0], Array{Int64,1}[[1, 2, 3]])
-
 julia> Integrals.II(P, 0,0,0)
 0.5
 ```
 """
 function II(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt=false)::Float64
     V, FV = P
-    partialSum = zeros(length(FV))
+    partialSum = zeros(nthreads())
     @threads for i=1:length(FV)
         tau = hcat([V[:,v] for v in FV[i]]...)
         if size(tau,2) == 3
             term = TT(tau, alpha, beta, gamma, signedInt)
             if signedInt
-                @inbounds partialSum[i] = term
-            else
-                @inbounds partialSum[i] = abs(term)
-            end
+		        @inbounds partialSum[threadid()] += term
+		    else
+		        @inbounds partialSum[threadid()] += abs(term)
+		    end
         elseif size(tau,2) > 3
             println("ERROR: FV[$(i)] is not a triangle")
         else
@@ -182,9 +176,7 @@ end
 
 """ 
 	III(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)::Float64
-
 Basic integration function on 3D space.
-
 # Example # unit 3D tetrahedron
 ```julia
 julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0]
@@ -192,25 +184,22 @@ julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0]
  0.0  1.0  0.0  0.0
  0.0  0.0  1.0  0.0
  0.0  0.0  0.0  1.0
-
 julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]]
 4-element Array{Array{Int64,1},1}:
  [1, 2, 4]
  [1, 3, 2]
  [4, 3, 1]
  [2, 3, 4]
-
 julia> P = V,FV
 ([0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0], 
 Array{Int64,1}[[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]])
-
 julia> Integrals.III(P, 0,0,0)
 0.16666666666666674
 ```
 """
 function III(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)::Float64
     V, FV = P
-    partialSum = zeros(length(FV))
+    partialSum = zeros(nthreads())
     @threads for i=1:length(FV)
         tau = hcat([V[:,v] for v in FV[i]]...)
         vo,va,vb = tau[:,1],tau[:,2],tau[:,3]
@@ -219,9 +208,9 @@ function III(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)::
         c = cross(a,b)
         term = c[1]/norm(c) * TT(tau, alpha+1, beta, gamma, signedInt)
         if signedInt
-            @inbounds partialSum[i] = term
+            @inbounds partialSum[threadid()] += term
         else
-            @inbounds partialSum[i] = abs(term)
+            @inbounds partialSum[threadid()] += abs(term)
         end
     end
     return sum(partialSum)/(alpha + 1)
@@ -229,9 +218,7 @@ end
 
 """
 	surface(P::Lar.LAR, signedInt::Bool=false)::Float64
-
 `surface` integral on polyhedron `P`.
-
 # Example unit 3D triangle
 ```julia
 julia> V = [0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0]
@@ -246,7 +233,6 @@ julia> FV = [[1,2,3]]
  
 julia> P = V,FV
 ([0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0], Array{Int64,1}[[1, 2, 3]])
-
 julia> Integrals.surface(P)
 0.5
 ```
@@ -257,9 +243,7 @@ end
 
 """
 	volume(P::LAR, signedInt::Bool=false)::Float64
-
 `volume` integral on polyhedron `P`.
-
 # Example # unit 3D tetrahedron
 ```julia
 julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0]
@@ -267,18 +251,15 @@ julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0]
  0.0  1.0  0.0  0.0
  0.0  0.0  1.0  0.0
  0.0  0.0  0.0  1.0
-
 julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]]
 4-element Array{Array{Int64,1},1}:
  [1, 2, 4]
  [1, 3, 2]
  [4, 3, 1]
  [2, 3, 4]
-
 julia> P = V,FV
 ([0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0], 
 Array{Int64,1}[[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]])
-
 julia> Integrals.volume(P)
 0.16666666666666674
 ```
@@ -289,17 +270,12 @@ end
 
 """ 
 	firstMoment(P::Lar.LAR)::Array{Float64,1}
-
 First moments as terms of the Euler tensor. Remember that the integration algorithm is a boundary integration. Hence the model must be a boundary model. In this case, a 2-complex of triangles. 
-
 # Example # unit 3D tetrahedron
 ```julia
 julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
-
 julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
-
 julia> P = V,FV;
-
 julia> Integrals.firstMoment(P)
 3-element Array{Float64,1}:
  0.0416667
@@ -319,17 +295,12 @@ end
 
 """ 
 	secondMoment(P::Lar.LAR)::Array{Float64,1}
-
 Second moments as terms of the Euler tensor.
-
 # Example # unit 3D tetrahedron
 ```julia
 julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
-
 julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
-
 julia> P = V,FV;
-
 julia> Integrals.secondMoment(P)
 3-element Array{Float64,1}:
  0.0166667
@@ -349,17 +320,12 @@ end
 
 """ 
 	inertiaProduct(P::Lar.LAR)::Array{Float64,1}
-
 Inertia products as terms of the Euler tensor.
-
 # Example # unit 3D tetrahedron
 ```julia
 julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
-
 julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
-
 julia> P = V,FV;
-
 julia> Integrals.inertiaProduct(P)
 3-element Array{Float64,1}:
  0.00833333
@@ -379,17 +345,12 @@ end
 
 """ 
 	centroid(P::Lar.LAR)::Array{Float64,1}
-
 Barycenter or `centroid` of polyhedron `P`.
-
 # Example # unit 3D tetrahedron
 ```julia
 julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
-
 julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
-
 julia> P = V,FV;
-
 julia> Integrals.centroid(P)
 3-element Array{Float64,1}:
  0.25
@@ -403,17 +364,12 @@ end
 
 """ 
 	inertiaMoment(P::Lar.LAR)::Array{Float64,1}
-
 Inertia moments  of polyhedron `P`.
-
 # Example # unit 3D tetrahedron
 ```julia
 julia> V = [0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 1.0];
-
 julia> FV = [[1, 2, 4], [1, 3, 2], [4, 3, 1], [2, 3, 4]];
-
 julia> P = V,FV;
-
 julia> Integrals.inertiaMoment(P)
 3-element Array{Float64,1}:
  0.0333333
@@ -435,7 +391,6 @@ function chainAreas(V::Array{Float64,2},EV::Array{Int64,2},chains::Array{Int64,2
 	FE = [chains[:,f] for f=1:size(chains,2)]
 	return chainAreas(V,EV,FE)
 end
-
 function chainAreas(V::Array{Float64,2}, EV::Array{Int64,2}, chains::Array{Array{Int64,1},1})
 	if size(V,1) == 2
 		V = vcat(V,zeros(1,size(V,2)))

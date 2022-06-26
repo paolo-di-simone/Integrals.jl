@@ -265,8 +265,6 @@ Per ogni loop, a partire da quello più in profondità, è stata definita una re
     	return ss1
 	end
 
-\newpage
-
 I loop all'interno della funzione `s1` sono stati ridotti in un unico loop come segue:
 
 	function s1(a, b, alpha, beta, gamma, vo)
@@ -455,8 +453,6 @@ A titolo d'esempio si riporta la definizione della funzione `firstMoment`.
 		return fetch(out)
 	end
 
-\newpage
-
 ## Conclusioni
 
 In definitiva, si è riusciti ad ottenere una buona ottimizzazione del codice con conseguente
@@ -508,8 +504,6 @@ Le interfacce principali, come si evince anche dal grafo delle dipendenze (Figur
 * `firstMoment(P::LAR)::Array{Float64,1}`
 
 * `secondMoment(P::LAR)::Array{Float64,1}`
-
-\newpage
 
 ## Link Github
 

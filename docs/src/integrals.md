@@ -220,8 +220,6 @@ La riga originale era:
 
 	return convert(Lar.Points, vs'), edges[2:end], faces[2:end]
 
-\newpage
-
 ## Ottimizzazione del codice
 
 La prima modifica apportata al codice è stata quella di dividere la funzione `TT` in funzioni più piccole; in particolare, è stata divisa

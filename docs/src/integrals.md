@@ -3,9 +3,7 @@
 
 ## Introduzione
 
-Questo modulo implementa un metodo di integrazione finita di polinomi del tipo: 
-
-$x^{\alpha}y^{\beta}z^{\gamma}$
+Questo modulo implementa un metodo di integrazione finita di polinomi del tipo $x^{\alpha}y^{\beta}z^{\gamma}$
 
 Vengono implementate due funzioni `II` e `III` che permettono di fare rispettivamente l'integrale di superficie e di volume di polinomi del tipo specificato.
 
@@ -16,8 +14,6 @@ La funzione `TT` permette di calcolare l'integrale sul singolo triangolo.
 L'integrale di volume si ottiene facilmente grazie al Teorema della Divergenza; questo teorema permette di calcolare un integrale di volume da un integrale di superficie.
 
 È importante notare che tutti i domini, sia 2D che 3D, sono definiti in 3 dimensioni.
-
-\newpage
 
 ## Grafo delle dipendenze
 
@@ -37,7 +33,7 @@ La funzione `function M(alpha::Int, beta::Int)::Float64` calcola la seguente for
 
 $II^{\alpha\beta} = \frac{1}{\alpha + 1}\sum_{h=0}^{\alpha + 1}{\binom{\alpha + 1}{h}\frac{(-1)^h}{h+\beta+1}}$
 
-Che con $\alpha=0$ e $\beta=0$ si riduce al calcolo dell'area del triangolo con vertici $w_o = (0, 0)$, $w_a = (1, 0)$ e $w_b = (0, 1)$, pari a $\frac{1}{2}$. Consideriamo la seguente funzione:
+Che con $\alpha=0, \beta=0$ si riduce al calcolo dell'area del triangolo con vertici $w_o = (0, 0), w_a = (1, 0), w_b = (0, 1)$, pari a $\frac{1}{2}$. Consideriamo la seguente funzione:
 
     function TT(tau::Array{Float64,2}, 
     	alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)
@@ -74,18 +70,17 @@ Che con $\alpha=0$ e $\beta=0$ si riduce al calcolo dell'area del triangolo con 
 	    end
     end
 
-
 Permette di calcolare l'integrale di un triangolo implementando la seguente formula:
 
-$II_{\tau}^{\alpha\beta\gamma} = II^{uv}|a \times b| \cdot \\ & \cdot \sum_{h=0}^{\alpha}\binom{\alpha}{h}x_0^{\alpha-h}\sum_{k=0}^{\beta}\binom{\beta}{k}y_0^{\beta-k}\sum_{m=0}^{\gamma}\binom{\gamma}{m}z_0^{\gamma-m} \cdot \\ & \cdot \sum_{i=0}^{h}\binom{h}{i}a_x^{h-i}b_x^i\sum_{j=0}^{k}\binom{k}{j}a_v^{k-j}b_y^j\sum_{l=0}^{m}\binom{m}{l}a_z^{m-l}b_z^l$
+$II_{\tau}^{\alpha\beta\gamma} = \\
+	& II^{uv}|a \times b| \cdot \\ 
+	& \cdot \sum_{h=0}^{\alpha}\binom{\alpha}{h}x_0^{\alpha-h}\sum_{k=0}^{\beta}\binom{\beta}{k}y_0^{\beta-k}\sum_{m=0}^{\gamma}\binom{\gamma}{m}z_0^{\gamma-m} \cdot \\ 
+	& \cdot \sum_{i=0}^{h}\binom{h}{i}a_x^{h-i}b_x^i\sum_{j=0}^{k}\binom{k}{j}a_v^{k-j}b_y^j\sum_{l=0}^{m}\binom{m}{l}a_z^{m-l}b_z^l$
 
-Dato il triangolo $\tau$,  come array di array di vertici di  tre dimensioni 
-$v_o = (x_o, y_o, z_o)$, estraiamo i vertici $v_o, v_a, v_b$. 
-Estratti i vertici calcoliamo i vettori $a$ e $b$ e l’equazione parametrica 
-del piano di inclusione del triangolo vale $p = v_o + u * a + v * b$.  
+Dato il triangolo $\tau$,  come array di array di vertici di  tre dimensioni $v_o = (x_o, y_o, z_o)$, estraiamo i vertici $v_o, v_a, v_b$. 
+Estratti i vertici calcoliamo i vettori $a$ e $b$ e l’equazione parametrica del piano di inclusione del triangolo vale $p = v_o + u * a + v * b$.  
 
-Possiamo  notare come $s4$ corrisponda all’ultima sommatoria e l’ultimo 
-termine della sommatoria corrisponda alla funzione `M` (con  $u = (h+k+m) - (i+j+l)$  e $v=(i+j+l)$), $s3$ alla penultima sommatoria, $s2$ alla terz’ultima sommatoria e $s1$ alle prime tre sommatorie. Alla fine viene eseguito il prodotto vettoriale fra $a$ e $b$.
+Possiamo  notare come $s4$ corrisponda all’ultima sommatoria e l’ultimo termine della sommatoria corrisponda alla funzione `M` (con  $u = (h+k+m) - (i+j+l), v=(i+j+l)$), $s3$ alla penultima sommatoria, $s2$ alla terz’ultima sommatoria e $s1$ alle prime tre sommatorie. Alla fine viene eseguito il prodotto vettoriale fra $a$ e $b$.
 
 Le funzioni:
 
@@ -286,7 +281,7 @@ Quindi il nuovo grafo delle dipendenze è il seguente:
 ![Grafo Delle Dipendenze, versione ottimizzata](assets/grafoDelleDipendenzeNuovo.png)
 
 Per quanto riguarda l'ottimizzazione del codice si è deciso di scompattare
-la funzione `TT` per particolari valori di $\alpha$, $\beta$ e $\gamma$ in modo da 
+la funzione `TT` per particolari valori di $\alpha, \beta, \gamma$ in modo da 
 rendere il calcolo integrale molto efficiente. 
 
 Consideriamo i seguenti casi:
@@ -304,8 +299,8 @@ Consideriamo i seguenti casi:
 * Prodotto d'inerzia rispetto z: $\alpha = 1, \beta = 1, \gamma = 0$
 
 **N.B.**: come si evince dal grafo delle dipendenze (Figure 7), tutte le funzioni sopra elencate chiamano a loro volta, con 
-gli stessi parametri $\alpha$, $\beta$ e $\gamma$, le funzioni `II` e `III`; in particolare, `II` fa una chiamata a `TT` sempre con i parametri $\alpha$, $\beta$ e $\gamma$,
-mentre `III` fa una chiamata a `TT` con i paramentri $\alpha + 1$, $\beta$ e $\gamma$.
+gli stessi parametri $\alpha, \beta, \gamma$, le funzioni `II` e `III`; in particolare, `II` fa una chiamata a `TT` sempre con i parametri $\alpha, \beta, \gamma$,
+mentre `III` fa una chiamata a `TT` con i paramentri $\alpha + 1, \beta, \gamma$.
 
 L'unica funzione che chiama `II` è `surface`, tutte le altre, `volume`, `firstMoment`, `secondMoment` e `inertiaProduct` chiamano `III`.
 
@@ -316,15 +311,15 @@ A questo punto i casi di studio della funzione `TT` diventano:
 
 * Superficie: $\alpha = 0, \beta = 0, \gamma = 0$
 * Volume: $\alpha = 1, \beta = 0, \gamma = 0$
-* Momento primo rispetto $x$: $\alpha = 2, \beta = 0, \gamma = 0$
-* Momento primo rispetto $y$: $\alpha = 1, \beta = 1, \gamma = 0$
-* Momento primo rispetto $z$: $\alpha = 1, \beta = 0, \gamma = 1$
-* Momento secondo rispetto $x$: $\alpha = 3, \beta = 0, \gamma = 0$
-* Momento secondo rispetto $y$: $\alpha = 1, \beta = 2, \gamma = 0$
-* Momento secondo rispetto $z$: $\alpha = 1, \beta = 0, \gamma = 2$
-* Prodotto d'inerzia rispetto $x$: $\alpha = 1, \beta = 1, \gamma = 1$
-* Prodotto d'inerzia rispetto $y$: $\alpha = 2, \beta = 0, \gamma = 1$
-* Prodotto d'inerzia rispetto $z$: $\alpha = 2, \beta = 1, \gamma = 0$
+* Momento primo rispetto x: $\alpha = 2, \beta = 0, \gamma = 0$
+* Momento primo rispetto y: $\alpha = 1, \beta = 1, \gamma = 0$
+* Momento primo rispetto z: $\alpha = 1, \beta = 0, \gamma = 1$
+* Momento secondo rispetto x: $\alpha = 3, \beta = 0, \gamma = 0$
+* Momento secondo rispetto y: $\alpha = 1, \beta = 2, \gamma = 0$
+* Momento secondo rispetto z: $\alpha = 1, \beta = 0, \gamma = 2$
+* Prodotto d'inerzia rispetto x: $\alpha = 1, \beta = 1, \gamma = 1$
+* Prodotto d'inerzia rispetto y: $\alpha = 2, \beta = 0, \gamma = 1$
+* Prodotto d'inerzia rispetto z: $\alpha = 2, \beta = 1, \gamma = 0$
 
 La funzione `TT` è stata dunque scompattata in modo da rendere il calcolo dell'area del triangolo, per questi particolari parametri, più efficiente, evitando di effettuare la chiamata alla funzione `s1`. 
 
@@ -473,7 +468,7 @@ con un numero di thread pari a 2 o 4.
 In conclusione è possibile osservare la seguente riduzione dei tempi d'esecuzione (considerando sempre il calcolo del volume 
 dell'oggetto *Stanford Bunny*):
 
-|Versione||Media (ms)|Deviazione (ms)|
+|Versione|Media (ms)|Deviazione (ms)|
 |:---|:---|:---|:---|:---|
 |Versione Iniziale|146.072|5.432|
 |Versione Ottimizzata|102.186|4.591|

@@ -471,7 +471,7 @@ dell'oggetto *Stanford Bunny*):
 |Versione|Media (ms)|Deviazione (ms)|
 |:---|:---|:---|
 |Versione Iniziale|146.072|5.432|
-|Versione Ottimizzata|102.186|4.591|
+|Versione Ottimizzata|127.480|4.591|
 |Versione Parallelizzata (2 thread)|102.186|11.621|
 
 ![Media](assets/media.png)

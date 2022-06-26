@@ -1,10 +1,3 @@
----
-header-includes:
-  - \usepackage{graphicx}
-  - \graphicspath { {./immagine_markdown} }
-output:
-    pdf_document
----
 
 # Lar Integrals
 
@@ -12,10 +5,7 @@ output:
 
 Questo modulo implementa un metodo di integrazione finita di polinomi del tipo: 
 
-\begin{equation}
-\label{d1}
-	x^{\alpha}y^{\beta}z^{\gamma}
-\end{equation}
+$x^{\alpha}y^{\beta}z^{\gamma}$
 
 Vengono implementate due funzioni `II` e `III` che permettono di fare rispettivamente l'integrale di superficie e di volume di polinomi del tipo specificato.
 
@@ -36,24 +26,16 @@ i nodi che rappresentano le funzioni della base di codice e dove ogni arco orien
 chiamante, e v2 è la funzione chiamata. Gli archi hanno un'etichetta numerica consecutiva corrispondente all’ordine
 delle chiamate dal nodo loro origine.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=150mm]{assets/grafoDelleDipendenzeVecchio.png}
-	\caption{Grafo Delle Dipendenze, versione iniziale}
-\end{figure} 
+![Grafo Delle Dipendenze, versione iniziale](assets/grafoDelleDipendenzeVecchio.png)
 
 In blu sono rappresentate le interfacce principali del modulo.
 
-\newpage
 
 ## Descrizione funzioni di integrazione
 
 La funzione `function M(alpha::Int, beta::Int)::Float64` calcola la seguente formula:
 
-\begin{equation}
-\label{d1}
-	II^{\alpha\beta} = \frac{1}{\alpha + 1}\sum_{h=0}^{\alpha + 1}{\binom{\alpha + 1}{h}\frac{(-1)^h}{h+\beta+1}}
-\end{equation}
+$II^{\alpha\beta} = \frac{1}{\alpha + 1}\sum_{h=0}^{\alpha + 1}{\binom{\alpha + 1}{h}\frac{(-1)^h}{h+\beta+1}}$
 
 Che con $\alpha=0$ e $\beta=0$ si riduce al calcolo dell'area del triangolo con vertici $w_o = (0, 0)$, $w_a = (1, 0)$ e $w_b = (0, 1)$, pari a $\frac{1}{2}$. Consideriamo la seguente funzione:
 
@@ -92,18 +74,10 @@ Che con $\alpha=0$ e $\beta=0$ si riduce al calcolo dell'area del triangolo con 
 	    end
     end
 
-\newpage
 
 Permette di calcolare l'integrale di un triangolo implementando la seguente formula:
 
-\begin{equation}
-\label{d1}
-	\begin{split}
-		II_{\tau}^{\alpha\beta\gamma} = & II^{uv}|a \times b| \cdot \\ 
-										& \cdot \sum_{h=0}^{\alpha}\binom{\alpha}{h}x_0^{\alpha-h}\sum_{k=0}^{\beta}\binom{\beta}{k}y_0^{\beta-k}\sum_{m=0}^{\gamma}\binom{\gamma}{m}z_0^{\gamma-m} \cdot \\ 
-										& \cdot \sum_{i=0}^{h}\binom{h}{i}a_x^{h-i}b_x^i\sum_{j=0}^{k}\binom{k}{j}a_v^{k-j}b_y^j\sum_{l=0}^{m}\binom{m}{l}a_z^{m-l}b_z^l
-	\end{split}
-\end{equation}
+$II_{\tau}^{\alpha\beta\gamma} = & II^{uv}|a \times b| \cdot \\ & \cdot \sum_{h=0}^{\alpha}\binom{\alpha}{h}x_0^{\alpha-h}\sum_{k=0}^{\beta}\binom{\beta}{k}y_0^{\beta-k}\sum_{m=0}^{\gamma}\binom{\gamma}{m}z_0^{\gamma-m} \cdot \\ & \cdot \sum_{i=0}^{h}\binom{h}{i}a_x^{h-i}b_x^i\sum_{j=0}^{k}\binom{k}{j}a_v^{k-j}b_y^j\sum_{l=0}^{m}\binom{m}{l}a_z^{m-l}b_z^l$
 
 Dato il triangolo $\tau$,  come array di array di vertici di  tre dimensioni 
 $v_o = (x_o, y_o, z_o)$, estraiamo i vertici $v_o, v_a, v_b$. 
@@ -113,7 +87,6 @@ del piano di inclusione del triangolo vale $p = v_o + u * a + v * b$.
 Possiamo  notare come $s4$ corrisponda all’ultima sommatoria e l’ultimo 
 termine della sommatoria corrisponda alla funzione `M` (con  $u = (h+k+m) - (i+j+l)$  e $v=(i+j+l)$), $s3$ alla penultima sommatoria, $s2$ alla terz’ultima sommatoria e $s1$ alle prime tre sommatorie. Alla fine viene eseguito il prodotto vettoriale fra $a$ e $b$.
 
-
 Le funzioni:
 
 * `function II(P::LAR, alpha::Int, beta::Int, gamma::Int, signedInt=false)::Float64`
@@ -122,7 +95,6 @@ Le funzioni:
 
 Permettono di calcolare rispettivamente l'integrale doppio e l'integrale triplo di un polinomio che ha come dominio un poligono; l'integrale viene calcolato attraverso la somma delle aree dei triangoli (funzione `TT`) ottenuti dalla suddivisione della sua superficie.
 
-\newpage
 
 ## Esempi e valutazione delle prestazioni nella versione iniziale
 
@@ -155,11 +127,7 @@ Per la rappresentazione dell'oggetto in questione è stata utilizzata la libreri
     
 Come si vede dall'immagine (Figure 2) la superficie dell'oggetto è triangolata, cioè divisa in tanti triangoli (69.451).
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=150mm]{assets/bunny.png}
-	\caption{Stanford Bunny}
-\end{figure} 
+![Stanford Bunny](assets/bunny.png)
 
 L'oggetto Bunny (e in generale qualunque oggetto utilizzato in questa libreria) è rappresentato attraverso una particolare struttura dati detta LAR (Linear Algebraic Representation), 
 cioè uno schema di rappresentazione generale per la modellazione geometrica e topologica.
@@ -193,7 +161,6 @@ Possiamo osservare alcuni valori di queste due strutture:
 	 [17278, 17347, 34910]
 	 [17278, 17346, 17347]
 
-\newpage
 
 Possiamo visualizzare qualche triangolo della struttura dati dello *Stanford Bunny* (Figure 3), in particolare visualizziamo i seguenti triangoli:
 
@@ -212,44 +179,24 @@ Possiamo visualizzare qualche triangolo della struttura dati dello *Stanford Bun
 	 [1, 2131, 14331]
 	 [1, 14331, 14339]
 	 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=150mm]{assets/triangoliBunny.png}
-	\caption{Triangoli Stanford Bunny}
-\end{figure} 
-
-\newpage
+![Triangoli Stanford Bunny](assets/triangoliBunny.png)
 
 Inoltre, come si descriveva inizialmente, è possible osservare (Figure 4) dei buchi al 
 di sotto dello *Stanford Bunny*, tre di questi erano il risultato di una copertura 
 inadeguata durante la scansione, e i due fori circolari sulla base esistevano sul Bunny fisico, che era vuoto.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=150mm]{assets/buchiBunny.png}
-	\caption{Stanford Bunny}
-\end{figure} 
+![Stanford Bunny](assets/buchiBunny.png)
 
 Dal momento che la funzione principale di integrazione del modulo è la funzione 
 `TT(tau::Array{Float64,2}, alpha::Int, beta::Int, gamma::Int, signedInt::Bool=false)` valutiamo i suoi tempi d'esecuzione attraverso la
 macro `@benchmark`, andando a calcolare l'integrale di superficie (con la funzione `TT`) di un triangolo del tipo `tau = [0.0 1.0 0.0; 0.0 0.0 1.0; 0.0 0.0 0.0]`.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=150mm]{assets/tempoTT-versioneIniziale.png}
-	\caption{Tempi d'esecuzione funzione TT, versione iniziale}
-\end{figure} 
-
-\newpage 
+![Tempi d'esecuzione funzione TT, versione iniziale](assets/tempoTT-versioneIniziale.png)
 
 Oltre a questo, valutiamo i tempi d'esecuzione della funzione `volume(P::LAR, signedInt::Bool=false)::Float64`, calcolando il volume
 dell'oggetto *Stanford Bunny*:
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=150mm]{assets/tempoVolume-versioneIniziale.png}
-	\caption{Tempi d'esecuzione funzione volume, versione iniziale}
-\end{figure} 
+![Tempi d'esecuzione funzione volume, versione iniziale](assets/tempoVolume-versioneIniziale.png)
 
 Come si può osservare (Figure 5 e 6), si ha come media d'esecuzione i seguenti valori:
 
@@ -340,13 +287,7 @@ I loop all'interno della funzione `s1` sono stati ridotti in un unico loop come 
 
 Quindi il nuovo grafo delle dipendenze è il seguente:
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=150mm]{assets/grafoDelleDipendenzeNuovo.png}
-	\caption{Grafo Delle Dipendenze, versione ottimizzata}
-\end{figure} 
-
-\newpage
+![Grafo Delle Dipendenze, versione ottimizzata](assets/grafoDelleDipendenzeNuovo.png)
 
 Per quanto riguarda l'ottimizzazione del codice si è deciso di scompattare
 la funzione `TT` per particolari valori di $\alpha$, $\beta$ e $\gamma$ in modo da 
@@ -391,8 +332,6 @@ A questo punto i casi di studio della funzione `TT` diventano:
 
 La funzione `TT` è stata dunque scompattata in modo da rendere il calcolo dell'area del triangolo, per questi particolari parametri, più efficiente, evitando di effettuare la chiamata alla funzione `s1`. 
 
-\newpage
-
 Di seguito si riporta a titolo d'esempio solo un pezzo della nuova funzione `TT`.
 
     function TT(...)
@@ -417,11 +356,7 @@ Di seguito si riporta a titolo d'esempio solo un pezzo della nuova funzione `TT`
 Valutiamo i tempi d'esecuzione della funzione `volume(P::LAR, signedInt::Bool=false)::Float64`, a seguito dell'ottimizzazione fatta alla funzione `TT`, calcolando il volume
 dell'oggetto *Stanford Bunny*:
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=150mm]{assets/tempoVolume-versioneOttimizzata.png}
-	\caption{Tempi d'esecuzione funzione volume, versione ottimizzata}
-\end{figure} 
+![Tempi d'esecuzione funzione volume, versione ottimizzata](assets/tempoVolume-versioneOttimizzata.png)
 
 Come si può osservare (Figure 8), si ha come media d'esecuzione il valore:
 
@@ -429,8 +364,6 @@ Come si può osservare (Figure 8), si ha come media d'esecuzione il valore:
 
 Confrontando i tempi con la versione iniziale, si può notare un **miglioramento** di circa
 18.592 ms.
-
-\newpage
 
 ## Parallelizzazione del codice
 
@@ -469,11 +402,7 @@ A titolo d'esempio si riportano le modifiche effettuate alla funzione `III`:
 Valutiamo i tempi d'esecuzione della funzione `volume(P::LAR, signedInt::Bool=false)::Float64`, 
 a seguito della parallelizzazione, calcolando il volume dell'oggetto *Stanford Bunny*:
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=150mm]{assets/tempoVolume-versioneParallelizzata.png}
-	\caption{Tempi d'esecuzione funzione volume, versione parallelizzata con 4 thread}
-\end{figure} 
+![Tempi d'esecuzione funzione volume, versione parallelizzata con 4 thread](assets/tempoVolume-versioneParallelizzata.png)
 
 **N.B.**: in questo esempio è stato fatto lanciando Julia con il comando `julia -t 4`, in modo
 da far girare il codice in modo parallelo su 4 thread. 
@@ -495,11 +424,7 @@ della versione parallela eseguendo il codice su 1, 2, 4 e 8 thread, ottenendo i 
 |4|87.814|32.001|44.453|120.004|
 |8|83.692|84.708|24.924|222.583|
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=150mm]{assets/mediaDeviazione.png}
-	\caption{Media e Deviazione dei tempi d'esecuzione al variare del numero di thread}
-\end{figure} 
+![Media e Deviazione dei tempi d'esecuzione al variare del numero di thread](assets/mediaDeviazione.png)
 
 Dal grafico (Figure 10) notiamo come aumentando il numero di thread diminuisce la media d'esecuzione (rimane molto simile fra 4 e 8 thread), ma aumenta drasticamente la varianza.
 
@@ -510,11 +435,7 @@ mentre il massimo tende a rimanere stabile fino a 4 thread per poi aumentare dra
 
 Da questo possiamo concludere, che per far girare la versione parallelizzata di questo codice, l'ideale sembrerebbe utilizzare un numero di thread tra 2 e 4.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=150mm]{assets/minMax.png}
-	\caption{Min e Max dei tempi d'esecuzione al variare del numero di thread}
-\end{figure} 
+![Min e Max dei tempi d'esecuzione al variare del numero di thread](assets/minMax.png)
 
 Consideriamo poi le seguenti tre funzioni:
 
@@ -564,17 +485,9 @@ dell'oggetto *Stanford Bunny*):
 |Versione Ottimizzata|102.186|4.591|
 |Versione Parallelizzata (2 thread)|102.186|11.621|
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=150mm]{assets/media.png}
-	\caption{Media}
-\end{figure} 
+![Media](assets/media.png)
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=150mm]{assets/deviazione.png}
-	\caption{Deviazione}
-\end{figure} 
+![Deviazione](assets/deviazione.png) 
 
 ## Interfacce principali
 

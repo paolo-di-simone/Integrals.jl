@@ -9,5 +9,6 @@ module Integrals
 	const LAR = Union{ Tuple{Points, Cells},Tuple{Points, Cells, Cells} }
 
 	include("./integrals.jl")
+	include("./utilities.jl")
 
 end

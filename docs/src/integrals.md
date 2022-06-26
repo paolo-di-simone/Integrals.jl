@@ -77,7 +77,7 @@ Che con $\alpha=0$ e $\beta=0$ si riduce al calcolo dell'area del triangolo con 
 
 Permette di calcolare l'integrale di un triangolo implementando la seguente formula:
 
-$II_{\tau}^{\alpha\beta\gamma} = & II^{uv}|a \times b| \cdot \\ & \cdot \sum_{h=0}^{\alpha}\binom{\alpha}{h}x_0^{\alpha-h}\sum_{k=0}^{\beta}\binom{\beta}{k}y_0^{\beta-k}\sum_{m=0}^{\gamma}\binom{\gamma}{m}z_0^{\gamma-m} \cdot \\ & \cdot \sum_{i=0}^{h}\binom{h}{i}a_x^{h-i}b_x^i\sum_{j=0}^{k}\binom{k}{j}a_v^{k-j}b_y^j\sum_{l=0}^{m}\binom{m}{l}a_z^{m-l}b_z^l$
+$II_{\tau}^{\alpha\beta\gamma} = II^{uv}|a \times b| \cdot \\ & \cdot \sum_{h=0}^{\alpha}\binom{\alpha}{h}x_0^{\alpha-h}\sum_{k=0}^{\beta}\binom{\beta}{k}y_0^{\beta-k}\sum_{m=0}^{\gamma}\binom{\gamma}{m}z_0^{\gamma-m} \cdot \\ & \cdot \sum_{i=0}^{h}\binom{h}{i}a_x^{h-i}b_x^i\sum_{j=0}^{k}\binom{k}{j}a_v^{k-j}b_y^j\sum_{l=0}^{m}\binom{m}{l}a_z^{m-l}b_z^l$
 
 Dato il triangolo $\tau$,  come array di array di vertici di  tre dimensioni 
 $v_o = (x_o, y_o, z_o)$, estraiamo i vertici $v_o, v_a, v_b$. 
@@ -293,15 +293,15 @@ Consideriamo i seguenti casi:
 
 * Superficie: $\alpha = 0, \beta = 0, \gamma = 0$
 * Volume: $\alpha = 0, \beta = 0, \gamma = 0$
-* Momento primo rispetto $x$: $\alpha = 1, \beta = 0, \gamma = 0$
-* Momento primo rispetto $y$: $\alpha = 0, \beta = 1, \gamma = 0$
-* Momento primo rispetto $z$: $\alpha = 0, \beta = 0, \gamma = 1$
-* Momento secondo rispetto $x$: $\alpha = 2, \beta = 0, \gamma = 0$
-* Momento secondo rispetto $y$: $\alpha = 0, \beta = 2, \gamma = 0$
-* Momento secondo rispetto $z$: $\alpha = 0, \beta = 0, \gamma = 2$
-* Prodotto d'inerzia rispetto $x$: $\alpha = 0, \beta = 1, \gamma = 1$
-* Prodotto d'inerzia rispetto $y$: $\alpha = 1, \beta = 0, \gamma = 1$
-* Prodotto d'inerzia rispetto $z$: $\alpha = 1, \beta = 1, \gamma = 0$
+* Momento primo rispetto x: $\alpha = 1, \beta = 0, \gamma = 0$
+* Momento primo rispetto y: $\alpha = 0, \beta = 1, \gamma = 0$
+* Momento primo rispetto z: $\alpha = 0, \beta = 0, \gamma = 1$
+* Momento secondo rispetto x: $\alpha = 2, \beta = 0, \gamma = 0$
+* Momento secondo rispetto y: $\alpha = 0, \beta = 2, \gamma = 0$
+* Momento secondo rispetto z: $\alpha = 0, \beta = 0, \gamma = 2$
+* Prodotto d'inerzia rispetto x: $\alpha = 0, \beta = 1, \gamma = 1$
+* Prodotto d'inerzia rispetto y: $\alpha = 1, \beta = 0, \gamma = 1$
+* Prodotto d'inerzia rispetto z: $\alpha = 1, \beta = 1, \gamma = 0$
 
 **N.B.**: come si evince dal grafo delle dipendenze (Figure 7), tutte le funzioni sopra elencate chiamano a loro volta, con 
 gli stessi parametri $\alpha$, $\beta$ e $\gamma$, le funzioni `II` e `III`; in particolare, `II` fa una chiamata a `TT` sempre con i parametri $\alpha$, $\beta$ e $\gamma$,
